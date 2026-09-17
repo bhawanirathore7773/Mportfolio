@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block seo_title %}{{ category.seo_title|default:category.name }} | {{ site_settings.site_name }}{% endblock %}
+{% block seo_description %}{{ category.seo_description|default:category.description|truncatechars:155 }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Work", "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'portfolio:work_home' %}"},
+    {"@type": "ListItem", "position": 2, "name": "{{ category.name }}", "item": "{{ request.build_absolute_uri }}"}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section style="padding-bottom:0;">
+  <div class="container">
+    <p style="font-size:0.85rem;"><a href="{% url 'portfolio:work_home' %}">Work</a> / {{ category.name }}</p>
+    <h1>{{ category.name }}</h1>
+    <p class="lead">{{ category.description }}</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <form method="get" style="margin-bottom: var(--space-3); display:flex; gap: var(--space-2); flex-wrap:wrap;">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search this collection" style="max-width:280px;">
+      {% if active_tag %}<input type="hidden" name="tag" value="{{ active_tag.slug }}">{% endif %}
+      <button type="submit" class="btn">Search</button>
+    </form>
+
+    {% if available_tags %}
+    <div style="margin-bottom: var(--space-4);">
+      <a href="?{% if query %}q={{ query }}&{% endif %}" class="tag-pill {% if not active_tag %}active{% endif %}">All</a>
+      {% for tag in available_tags %}
+      <a href="?tag={{ tag.slug }}{% if query %}&q={{ query }}{% endif %}" class="tag-pill {% if active_tag.slug == tag.slug %}active{% endif %}">{{ tag.name }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if page_obj %}
+    <div class="project-grid">
+      {% for project in page_obj %}
+      <a class="project-card" href="{{ project.get_absolute_url }}">
+        <div class="frame landscape">
+          {% if project.cover_image %}<img src="{{ project.cover_image.url }}" alt="{{ project.title }} — {{ category.name }}">
+          {% else %}<div class="placeholder-swatch">{{ project.title }}</div>{% endif %}
+        </div>
+        <div class="meta">{{ project.design_type|default:category.name }}</div>
+        <h3>{{ project.title }}</h3>
+        <p>{{ project.short_description|truncatewords:16 }}</p>
+        <span class="view-link">View Project &rarr;</span>
+      </a>
+      {% endfor %}
+    </div>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_tag %}&tag={{ active_tag.slug }}{% endif %}">&larr; Prev</a>{% endif %}
+      <span class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_tag %}&tag={{ active_tag.slug }}{% endif %}">Next &rarr;</a>{% endif %}
+    </div>
+    {% endif %}
+    {% else %}
+    <p>No projects match your search yet.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

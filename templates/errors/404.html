@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block seo_title %}Page Not Found | {{ site_settings.site_name }}{% endblock %}
+{% block content %}
+<section class="container error-page">
+  <h1>404</h1>
+  <p class="lead">Looks like this design is still being developed.</p>
+  <a href="{% url 'portfolio:work_home' %}" class="btn btn-primary">Back to Portfolio</a>
+</section>
+{% endblock %}

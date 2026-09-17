@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block seo_title %}Design Services | {{ site_settings.site_name }}{% endblock %}
+{% block seo_description %}Textile print, surface pattern and CAD design services offered by {{ site_settings.site_name }}.{% endblock %}
+
+{% block content %}
+<section style="padding-bottom:0;">
+  <div class="container">
+    <h1>Design Services</h1>
+    <p class="lead">Creative textile design support for brands, manufacturers, fashion businesses and clients looking for distinctive, application-ready textile artwork.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    {% if services %}
+    <div class="services-grid">
+      {% for service in services %}
+      <div class="service-card" id="{{ service.slug }}">
+        <h3>{{ service.title }}</h3>
+        <p>{{ service.short_description }}</p>
+        {% if service.detailed_description %}<p>{{ service.detailed_description }}</p>{% endif %}
+        {% if service.deliverable_list %}
+        <h4 style="font-size:0.9rem;">Deliverables</h4>
+        <ul>{% for item in service.deliverable_list %}<li>{{ item }}</li>{% endfor %}</ul>
+        {% endif %}
+        {% if service.ideal_for_list %}
+        <h4 style="font-size:0.9rem;">Ideal for</h4>
+        <ul>{% for item in service.ideal_for_list %}<li>{{ item }}</li>{% endfor %}</ul>
+        {% endif %}
+        <a href="{% url 'core:hire' %}" class="btn-ghost btn" style="margin-top:var(--space-2);">Hire Me</a>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>Services will appear here once added from the studio dashboard.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

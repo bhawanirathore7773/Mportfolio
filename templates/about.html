@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block seo_title %}About | {{ site_settings.site_name }}{% endblock %}
+{% block seo_description %}Learn about {{ site_settings.site_name }}, a Textile Designer & CAD Designer{% if site_settings.location %} based in {{ site_settings.location }}{% endif %}.{% endblock %}
+
+{% block content %}
+<section style="padding-bottom:0;">
+  <div class="container">
+    <h1>About the Designer</h1>
+    <p class="lead">
+      I am a Textile Designer and CAD Designer with more than two years of professional experience in
+      developing creative textile artwork. My work focuses on translating ideas, visual references and
+      current design directions into refined textile designs suitable for contemporary fashion and
+      textile applications.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="container" style="max-width:720px;">
+    <h2>My Approach</h2>
+    <p>
+      My approach combines creativity, visual research and attention to detail. I enjoy exploring
+      motifs, compositions, colour relationships and repeat structures to develop designs that are
+      visually engaging while remaining relevant to their intended application.
+    </p>
+  </div>
+</section>
+
+{% if skills %}
+<section class="raised">
+  <div class="container">
+    <div class="section-head"><h2>Areas of Expertise</h2></div>
+    <div class="services-grid">
+      {% regroup skills by get_category_display as skill_groups %}
+      {% for group in skill_groups %}
+      <div class="service-card">
+        <h4>{{ group.grouper }}</h4>
+        <ul>
+          {% for skill in group.list %}<li>{{ skill.name }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section>
+  <div class="container text-center">
+    <a href="{% url 'portfolio:work_home' %}" class="btn btn-primary">Explore My Work</a>
+  </div>
+</section>
+{% endblock %}

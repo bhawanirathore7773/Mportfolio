@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<section class="hero">
+  <div class="container hero" style="padding-block:0;">
+    <div class="hero-copy">
+      {% if homepage.hero_badge_text %}<span class="badge">{{ homepage.hero_badge_text }}</span>{% endif %}
+      <h1>{{ homepage.hero_title }}</h1>
+      <p class="lead">{{ homepage.hero_subtitle }}</p>
+      <div class="hero-actions">
+        <a href="{{ homepage.hero_primary_cta_link }}" class="btn btn-primary">{{ homepage.hero_primary_cta_text }}</a>
+        <a href="{{ homepage.hero_secondary_cta_link }}" class="btn">{{ homepage.hero_secondary_cta_text }}</a>
+      </div>
+      {% if site_settings.open_to_freelance %}
+        <p class="hero-note">Currently open to selected freelance projects and professional opportunities.</p>
+      {% endif %}
+    </div>
+    <div class="hero-visual">
+      <div class="frame portrait">
+        {% if homepage.hero_image %}
+          <img src="{{ homepage.hero_image.url }}" alt="Featured textile design by {{ site_settings.site_name }}">
+        {% else %}
+          <div class="placeholder-swatch">Hero artwork<br>(upload from Homepage Settings)</div>
+        {% endif %}
+      </div>
+      <div class="frame square secondary">
+        {% if homepage.hero_secondary_image %}
+          <img src="{{ homepage.hero_secondary_image.url }}" alt="Detail of a textile surface pattern">
+        {% else %}
+          <div class="placeholder-swatch">Detail shot</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="raised">
+  <div class="container" style="max-width: 760px;">
+    <h2>{{ homepage.intro_heading }}</h2>
+    <p>{{ homepage.intro_content }}</p>
+    <a href="{% url 'profiles:about' %}" class="btn-ghost btn" style="margin-top: var(--space-2);">More About Me &rarr;</a>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <h2>{{ homepage.work_section_heading }}</h2>
+        <p>{{ homepage.work_section_subtitle }}</p>
+      </div>
+    </div>
+
+    {% if categories %}
+    <div class="category-grid">
+      {% for category in categories %}
+      <a class="category-card" href="{{ category.get_absolute_url }}">
+        <div class="category-circle">
+          {% with category.projects.first as first_project %}
+            {% if category.cover_image %}
+              <img src="{{ category.cover_image.url }}" alt="{{ category.name }} — textile design category">
+            {% elif first_project and first_project.cover_image %}
+              <img src="{{ first_project.cover_image.url }}" alt="{{ category.name }} — textile design category">
+            {% else %}
+              <div class="placeholder-swatch">{{ category.name }}</div>
+            {% endif %}
+          {% endwith %}
+        </div>
+        <h4>{{ category.name }}</h4>
+        <p style="font-size:0.9rem;">{{ category.description|truncatewords:14 }}</p>
+        <span class="explore">Explore Collection &rarr;</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>Categories will appear here once added from the studio dashboard.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% if featured_projects %}
+<section class="raised">
+  <div class="container">
+    <div class="section-head">
+      <h2>Recent projects</h2>
+      <a href="{% url 'portfolio:work_home' %}" class="btn-ghost btn">View Portfolio</a>
+    </div>
+    <div class="project-grid">
+      {% for project in featured_projects %}
+      <a class="project-card" href="{{ project.get_absolute_url }}">
+        <div class="frame landscape">
+          {% if project.cover_image %}
+            <img src="{{ project.cover_image.url }}" alt="{{ project.title }} — {{ project.category.name }}">
+          {% else %}
+            <div class="placeholder-swatch">{{ project.title }}</div>
+          {% endif %}
+        </div>
+        <div class="meta">{{ project.category.name }}</div>
+        <h3>{{ project.title }}</h3>
+        <p>{{ project.short_description|truncatewords:16 }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if services %}
+<section>
+  <div class="container">
+    <div class="section-head"><h2>Design Services</h2></div>
+    <div class="services-grid">
+      {% for service in services %}
+      <div class="service-card">
+        <h3>{{ service.title }}</h3>
+        <p>{{ service.short_description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="{% url 'profiles:services' %}" class="btn-ghost btn" style="margin-top: var(--space-3);">All Services</a>
+  </div>
+</section>
+{% endif %}
+
+{% if process_steps %}
+<section class="raised">
+  <div class="container">
+    <div class="section-head"><h2>Design Process</h2></div>
+    <div class="process-grid">
+      {% for step in process_steps %}
+      <div class="process-step">
+        <div class="num">{{ step.step_number|stringformat:"02d" }}</div>
+        <h4>{{ step.title }}</h4>
+        <p>{{ step.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if testimonials %}
+<section>
+  <div class="container">
+    <div class="section-head"><h2>What clients say</h2></div>
+    <div class="services-grid">
+      {% for t in testimonials %}
+      <div class="service-card">
+        <p class="lead">&ldquo;{{ t.quote }}&rdquo;</p>
+        <p><strong>{{ t.author_name }}</strong>{% if t.author_role %} — {{ t.author_role }}{% endif %}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if recent_posts %}
+<section class="raised">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <h2>From the Design Desk</h2>
+        <p>Insights into textile design, CAD development, surface patterns, trends and creative processes.</p>
+      </div>
+    </div>
+    <div class="blog-grid">
+      {% for post in recent_posts %}
+      <a class="blog-card" href="{{ post.get_absolute_url }}">
+        <div class="frame wide">
+          {% if post.featured_image %}<img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+          {% else %}<div class="placeholder-swatch">{{ post.title }}</div>{% endif %}
+        </div>
+        <div class="meta">{% if post.category %}{{ post.category.name }} · {% endif %}{{ post.reading_time_minutes }} min read</div>
+        <h3>{{ post.title }}</h3>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if site_settings.available_for_opportunities %}
+<section>
+  <div class="container text-center" style="max-width:640px;">
+    <h2>Available for Professional Opportunities</h2>
+    <p>I am open to exploring suitable opportunities with fashion brands, textile companies, design studios and creative teams.</p>
+    <div class="hero-actions" style="justify-content:center;">
+      {% if site_settings.cv_file %}<a href="{{ site_settings.cv_file.url }}" class="btn btn-primary">Download CV</a>{% endif %}
+      <a href="{% url 'core:contact' %}" class="btn">Contact Me</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="raised">
+  <div class="container text-center" style="max-width:640px;">
+    <h2>{{ homepage.final_cta_heading }}</h2>
+    <p>{{ homepage.final_cta_description }}</p>
+    <div class="hero-actions" style="justify-content:center;">
+      <a href="{% url 'core:hire' %}" class="btn btn-primary">Hire Me</a>
+      <a href="{% url 'portfolio:work_home' %}" class="btn">View Portfolio</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

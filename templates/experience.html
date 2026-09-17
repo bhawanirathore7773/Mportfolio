@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block seo_title %}Experience | {{ site_settings.site_name }}{% endblock %}
+{% block seo_description %}Professional experience of {{ site_settings.site_name }}, Textile Designer & CAD Designer.{% endblock %}
+
+{% block content %}
+<section style="padding-bottom:0;">
+  <div class="container">
+    <h1>Professional Experience</h1>
+  </div>
+</section>
+
+<section>
+  <div class="container" style="max-width:760px;">
+    {% if experiences %}
+    <div class="timeline">
+      {% for exp in experiences %}
+      <div class="timeline-item">
+        <div class="timeline-dates">
+          {{ exp.start_date|date:"M Y" }} — {% if exp.is_current %}Present{% else %}{{ exp.end_date|date:"M Y" }}{% endif %}
+        </div>
+        <h3>{{ exp.role }}</h3>
+        <p><strong>{{ exp.company }}</strong>{% if exp.location %} · {{ exp.location }}{% endif %}</p>
+        {% if exp.description %}<p>{{ exp.description }}</p>{% endif %}
+        {% if exp.responsibility_list %}
+        <ul>
+          {% for item in exp.responsibility_list %}<li>{{ item }}</li>{% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>Experience entries will appear here once added from the studio dashboard.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block seo_title %}Terms | {{ site_settings.site_name }}{% endblock %}
+{% block content %}
+<section>
+  <div class="container" style="max-width:720px;">
+    <h1>Terms of Use</h1>
+    <p style="font-size:0.85rem; color:var(--ink-soft);">Last updated: {% now "d F Y" %}</p>
+
+    <p><em>This is a starting template. Please have it reviewed by a legal professional before publishing.</em></p>
+
+    <h3>Use of Content</h3>
+    <p>All designs, images and written content on this site are the property of {{ site_settings.site_name }} unless otherwise noted, and may not be reproduced, copied or used without prior written permission.</p>
+
+    <h3>Project Enquiries</h3>
+    <p>Submitting a message through the Contact or Hire Me forms does not create a binding agreement. Project terms, pricing and timelines are confirmed separately once a project is discussed and agreed.</p>
+
+    <h3>Limitation of Liability</h3>
+    <p>This site is provided as-is. While reasonable care is taken to keep information accurate and up to date, no warranty is made regarding completeness or fitness for a particular purpose.</p>
+
+    <h3>Contact</h3>
+    <p>Questions about these terms can be sent to {{ site_settings.contact_email|default:"the site owner" }}.</p>
+  </div>
+</section>
+{% endblock %}

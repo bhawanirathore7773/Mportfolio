@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block seo_title %}Hire Me | {{ site_settings.site_name }}{% endblock %}
+{% block seo_description %}Start a textile print, surface pattern or CAD design project with {{ site_settings.site_name }}.{% endblock %}
+
+{% block content %}
+<section>
+  <div class="container" style="max-width:720px;">
+    <h1>Let's Work Together.</h1>
+    <p class="lead">Have a textile design project, collection idea or creative requirement? Share the details and let's discuss how I can help.</p>
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      <div class="field field-hp">{{ form.website.label_tag }}{{ form.website }}</div>
+
+      <div class="form-grid">
+        <div class="field">{{ form.full_name.label_tag }}{{ form.full_name }}{{ form.full_name.errors }}</div>
+        <div class="field">{{ form.email.label_tag }}{{ form.email }}{{ form.email.errors }}</div>
+        <div class="field">{{ form.phone.label_tag }}{{ form.phone }}{{ form.phone.errors }}</div>
+        <div class="field">{{ form.company.label_tag }}{{ form.company }}{{ form.company.errors }}</div>
+      </div>
+
+      <div class="field">{{ form.project_type.label_tag }}{{ form.project_type }}{{ form.project_type.errors }}</div>
+
+      <div class="form-grid">
+        <div class="field">{{ form.budget_range.label_tag }}{{ form.budget_range }}{{ form.budget_range.errors }}</div>
+        <div class="field">{{ form.timeline.label_tag }}{{ form.timeline }}{{ form.timeline.errors }}</div>
+      </div>
+
+      <div class="field">{{ form.project_details.label_tag }}{{ form.project_details }}{{ form.project_details.errors }}</div>
+      <div class="field">{{ form.reference_file.label_tag }}{{ form.reference_file }}{{ form.reference_file.errors }}</div>
+      <div class="field">{{ form.preferred_contact_method.label_tag }}{{ form.preferred_contact_method }}</div>
+
+      <button type="submit" class="btn btn-primary">Send Project Enquiry</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block seo_title %}Blog | {{ site_settings.site_name }}{% endblock %}
+{% block seo_description %}Insights into textile design, CAD development, surface patterns and creative process from {{ site_settings.site_name }}.{% endblock %}
+
+{% block content %}
+<section style="padding-bottom:0;">
+  <div class="container">
+    <h1>From the Design Desk</h1>
+    <p class="lead">Insights into textile design, CAD development, surface patterns, trends and creative processes.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    {% if categories %}
+    <div style="margin-bottom: var(--space-4);">
+      <a href="{% url 'blog:post_list' %}" class="tag-pill {% if not active_category %}active{% endif %}">All</a>
+      {% for cat in categories %}
+      <a href="?category={{ cat.slug }}" class="tag-pill {% if active_category.slug == cat.slug %}active{% endif %}">{{ cat.name }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if page_obj %}
+    <div class="blog-grid">
+      {% for post in page_obj %}
+      <a class="blog-card" href="{{ post.get_absolute_url }}">
+        <div class="frame wide">
+          {% if post.featured_image %}<img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+          {% else %}<div class="placeholder-swatch">{{ post.title }}</div>{% endif %}
+        </div>
+        <div class="meta">{% if post.category %}{{ post.category.name }} · {% endif %}{{ post.published_date|date:"d M Y" }} · {{ post.reading_time_minutes }} min read</div>
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.excerpt|default:post.content|truncatewords:20 }}</p>
+        <span class="view-link">Read Article &rarr;</span>
+      </a>
+      {% endfor %}
+    </div>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">&larr; Prev</a>{% endif %}
+      <span class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Next &rarr;</a>{% endif %}
+    </div>
+    {% endif %}
+    {% else %}
+    <p>Articles will appear here once published from the studio dashboard.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

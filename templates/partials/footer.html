@@ -1,0 +1,35 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>{{ site_settings.site_name }}</h4>
+        <p>{{ site_settings.tagline }}</p>
+        {% if site_settings.contact_email %}<p><a href="mailto:{{ site_settings.contact_email }}">{{ site_settings.contact_email }}</a></p>{% endif %}
+      </div>
+      <div>
+        <h4>Navigate</h4>
+        <ul>
+          <li><a href="{% url 'portfolio:work_home' %}">Work</a></li>
+          <li><a href="{% url 'profiles:services' %}">Services</a></li>
+          <li><a href="{% url 'blog:post_list' %}">Blog</a></li>
+          <li><a href="{% url 'core:contact' %}">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Connect</h4>
+        <ul>
+          {% for link in social_links %}
+            <li><a href="{{ link.url }}" rel="me noopener" target="_blank">{{ link.label|default:link.get_platform_display }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; {% now "Y" %} {{ site_settings.site_name }}. All rights reserved.</span>
+      <span>
+        <a href="{% url 'core:privacy_policy' %}">Privacy Policy</a> &nbsp;·&nbsp;
+        <a href="{% url 'core:terms' %}">Terms</a>
+      </span>
+    </div>
+  </div>
+</footer>
