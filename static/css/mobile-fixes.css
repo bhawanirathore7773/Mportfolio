@@ -1,11 +1,27 @@
-/* Mobile navigation — isolated responsive layer. Keep main.css untouched. */
+/* Mobile + fixed-header polish — isolated responsive layer. Keep main.css untouched. */
+
+.site-header {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  will-change: transform;
+  transform: translate3d(0,0,0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+body {
+  padding-top: var(--site-header-height, 72px);
+}
+
 @media (max-width: 860px) {
   html { overflow-x: hidden; }
   body { overflow-x: hidden; }
 
   .site-header {
-    z-index: 1000;
-    width: 100%;
     background: rgba(246,245,240,.97);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
@@ -21,10 +37,8 @@
   .brand small { line-height: 1.25; }
   .header-actions { display: none; }
 
-  /* When the menu is open, make the header a dedicated viewport layer.
-     This avoids iOS Safari sticky-position quirks and keeps the drawer fixed. */
   .site-header.menu-open {
-    position: fixed;
+    position: fixed !important;
     inset: 0;
     width: 100%;
     height: 100vh;
@@ -56,19 +70,19 @@
   }
 
   .main-nav {
-    position: fixed;
+    position: fixed !important;
     top: 0;
     right: 0;
     bottom: 0;
     left: auto;
     z-index: 2;
-    width: min(340px, 88vw);
+    width: min(340px,88vw);
     height: 100vh;
     height: 100dvh;
     min-height: 100vh;
     box-sizing: border-box;
     margin: 0;
-    padding: max(88px, calc(env(safe-area-inset-top) + 76px)) 28px max(28px, env(safe-area-inset-bottom));
+    padding: max(88px,calc(env(safe-area-inset-top) + 76px)) 28px max(28px,env(safe-area-inset-bottom));
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -79,7 +93,7 @@
     transform: translate3d(105%,0,0);
     visibility: hidden;
     pointer-events: none;
-    transition: transform .34s cubic-bezier(.22,1,.36,1), visibility 0s linear .34s;
+    transition: transform .34s cubic-bezier(.22,1,.36,1),visibility 0s linear .34s;
     will-change: transform;
   }
 
@@ -87,7 +101,7 @@
     transform: translate3d(0,0,0);
     visibility: visible;
     pointer-events: auto;
-    transition: transform .34s cubic-bezier(.22,1,.36,1), visibility 0s linear 0s;
+    transition: transform .34s cubic-bezier(.22,1,.36,1),visibility 0s linear 0s;
   }
 
   .main-nav ul {
@@ -153,7 +167,7 @@
     right: 9px;
     height: 2px;
     border-radius: 2px;
-    transition: top .25s ease, transform .25s ease, opacity .18s ease, background-color .18s ease;
+    transition: top .25s ease,transform .25s ease,opacity .18s ease,background-color .18s ease;
   }
 
   .menu-toggle span { top: 50%; }
@@ -162,11 +176,11 @@
 
   .menu-toggle[aria-expanded="true"] {
     position: fixed;
-    top: max(11px, env(safe-area-inset-top));
-    right: max(14px, env(safe-area-inset-right));
+    top: max(11px,env(safe-area-inset-top));
+    right: max(14px,env(safe-area-inset-right));
     z-index: 4;
     background: #fffefb;
-    box-shadow: 0 0 0 1px rgba(218,214,203,.8), 0 6px 18px rgba(22,24,28,.08);
+    box-shadow: 0 0 0 1px rgba(218,214,203,.8),0 6px 18px rgba(22,24,28,.08);
     pointer-events: auto;
   }
 
@@ -175,12 +189,12 @@
   .menu-toggle[aria-expanded="true"] span::after { top: 0; transform: rotate(-45deg); }
 
   .hero {
-    padding-top: clamp(2.5rem, 8vw, 4rem);
-    padding-bottom: clamp(4rem, 10vw, 6rem);
+    padding-top: clamp(2.5rem,8vw,4rem);
+    padding-bottom: clamp(4rem,10vw,6rem);
   }
 
   .hero-copy h1 {
-    font-size: clamp(3rem, 12vw, 4.5rem);
+    font-size: clamp(3rem,12vw,4.5rem);
     overflow-wrap: anywhere;
   }
 
@@ -197,7 +211,7 @@
   .site-header.menu-open .container { padding-inline: 0; }
   .brand { font-size: 1.2rem; }
   .brand small { font-size: .66rem; }
-  .main-nav { width: min(340px, 90vw); padding-left: 24px; padding-right: 24px; }
+  .main-nav { width: min(340px,90vw); padding-left: 24px; padding-right: 24px; }
   .hero-actions { display: grid; grid-template-columns: 1fr 1fr; }
   .hero-actions .btn { width: 100%; padding-inline: 12px; }
 }
@@ -209,7 +223,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  @media (max-width: 860px) {
-    .main-nav { transition: none !important; }
-  }
+  .main-nav { transition: none !important; }
 }
