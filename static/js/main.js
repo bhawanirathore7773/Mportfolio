@@ -3,26 +3,26 @@
 
   var header = document.querySelector(".site-header");
 
-  /* Keep fixed-header spacing synchronized with the real rendered height. */
-  var syncHeaderHeight = function () {
-    if (!header || header.classList.contains("menu-open")) return;
-    var height = Math.ceil(header.getBoundingClientRect().height);
-    if (height > 0) document.documentElement.style.setProperty("--site-header-height", height + "px");
-  };
-
+  /* Keep fixed-header spacing exact without letting the open mobile drawer
+     change the measured height. */
   if (header) {
+    var setHeaderHeight = function () {
+      if (!header.classList.contains("menu-open")) {
+        document.documentElement.style.setProperty("--site-header-height", header.offsetHeight + "px");
+      }
+    };
+
     var onScroll = function () {
       if (!header.classList.contains("menu-open")) {
         header.classList.toggle("is-scrolled", window.scrollY > 8);
       }
     };
+
+    setHeaderHeight();
     onScroll();
-    syncHeaderHeight();
+    window.addEventListener("load", setHeaderHeight, { once: true });
+    window.addEventListener("resize", setHeaderHeight, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", syncHeaderHeight, { passive: true });
-    if (window.ResizeObserver) {
-      new ResizeObserver(syncHeaderHeight).observe(header.querySelector(".container") || header);
-    }
   }
 
   var toggle = document.querySelector(".menu-toggle");
@@ -38,13 +38,13 @@
       document.documentElement.classList.remove("menu-open");
       document.body.classList.remove("menu-open");
       document.body.style.overflow = "";
-      syncHeaderHeight();
+      if (header) document.documentElement.style.setProperty("--site-header-height", header.offsetHeight + "px");
     };
 
     var openMenu = function () {
       if (!mobileQuery.matches) return;
-      nav.classList.add("is-open");
       if (header) header.classList.add("menu-open");
+      nav.classList.add("is-open");
       toggle.setAttribute("aria-expanded", "true");
       toggle.setAttribute("aria-label", "Close menu");
       document.documentElement.classList.add("menu-open");
@@ -54,13 +54,13 @@
 
     toggle.addEventListener("click", function (event) {
       event.preventDefault();
+      event.stopPropagation();
       if (nav.classList.contains("is-open")) closeMenu();
       else openMenu();
     });
 
     nav.querySelectorAll("a").forEach(function (link) {
       link.addEventListener("click", closeMenu);
-      link.addEventListener("touchend", closeMenu, { passive: true });
     });
 
     document.addEventListener("keydown", function (event) {
@@ -70,15 +70,12 @@
       }
     });
 
-    var handleOutside = function (event) {
+    document.addEventListener("click", function (event) {
       if (!nav.classList.contains("is-open")) return;
       var target = event.target;
       if (target && target.closest && (target.closest(".main-nav") || target.closest(".menu-toggle"))) return;
       closeMenu();
-    };
-
-    document.addEventListener("click", handleOutside);
-    document.addEventListener("touchend", handleOutside, { passive: true });
+    });
 
     var resetDesktop = function (event) {
       if (!event.matches) closeMenu();
