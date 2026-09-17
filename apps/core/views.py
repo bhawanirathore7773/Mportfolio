@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 
 from apps.blog.models import BlogPost
@@ -35,6 +36,11 @@ def home(request):
     return render(request, "home.html", context)
 
 
+def health_check(request):
+    """Lightweight deployment health endpoint that does not require the database."""
+    return JsonResponse({"status": "ok"})
+
+
 def contact(request):
     form = ContactForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
@@ -66,8 +72,6 @@ def terms(request):
 
 
 def robots_txt(request):
-    from django.http import HttpResponse
-
     lines = [
         "User-agent: *",
         "Disallow: /admin/",
