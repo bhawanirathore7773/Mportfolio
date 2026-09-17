@@ -3,7 +3,7 @@ services:
     name: manish-kanwar-portfolio
     runtime: docker
     plan: free
-    healthCheckPath: /
+    healthCheckPath: /health/
     autoDeploy: true
     envVars:
       - key: DJANGO_SETTINGS_MODULE
