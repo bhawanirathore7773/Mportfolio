@@ -3,7 +3,11 @@
 
   var header = document.querySelector(".site-header");
   if (header) {
-    var onScroll = function () { header.classList.toggle("is-scrolled", window.scrollY > 8); };
+    var onScroll = function () {
+      if (!header.classList.contains("menu-open")) {
+        header.classList.toggle("is-scrolled", window.scrollY > 8);
+      }
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
   }
@@ -15,6 +19,7 @@
   if (toggle && nav) {
     var closeMenu = function () {
       nav.classList.remove("is-open");
+      if (header) header.classList.remove("menu-open");
       toggle.setAttribute("aria-expanded", "false");
       toggle.setAttribute("aria-label", "Open menu");
       document.documentElement.classList.remove("menu-open");
@@ -23,7 +28,9 @@
     };
 
     var openMenu = function () {
+      if (!mobileQuery.matches) return;
       nav.classList.add("is-open");
+      if (header) header.classList.add("menu-open");
       toggle.setAttribute("aria-expanded", "true");
       toggle.setAttribute("aria-label", "Close menu");
       document.documentElement.classList.add("menu-open");
@@ -31,12 +38,15 @@
       document.body.style.overflow = "hidden";
     };
 
-    toggle.addEventListener("click", function () {
-      nav.classList.contains("is-open") ? closeMenu() : openMenu();
+    toggle.addEventListener("click", function (event) {
+      event.preventDefault();
+      if (nav.classList.contains("is-open")) closeMenu();
+      else openMenu();
     });
 
     nav.querySelectorAll("a").forEach(function (link) {
       link.addEventListener("click", closeMenu);
+      link.addEventListener("touchend", closeMenu, { passive: true });
     });
 
     document.addEventListener("keydown", function (event) {
@@ -46,11 +56,15 @@
       }
     });
 
-    document.addEventListener("click", function (event) {
+    var handleOutside = function (event) {
       if (!nav.classList.contains("is-open")) return;
-      if (event.target.closest(".main-nav") || event.target.closest(".menu-toggle")) return;
+      var target = event.target;
+      if (target && target.closest && (target.closest(".main-nav") || target.closest(".menu-toggle"))) return;
       closeMenu();
-    });
+    };
+
+    document.addEventListener("click", handleOutside);
+    document.addEventListener("touchend", handleOutside, { passive: true });
 
     var resetDesktop = function (event) {
       if (!event.matches) closeMenu();
