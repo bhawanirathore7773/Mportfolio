@@ -2,37 +2,17 @@ services:
   - type: web
     name: manish-kanwar-portfolio
     runtime: docker
-    plan: starter
+    plan: free
+    healthCheckPath: /
+    autoDeploy: true
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: config.settings.production
       - key: SECRET_KEY
         generateValue: true
+      - key: DEBUG
+        value: "False"
       - key: ALLOWED_HOSTS
         value: .onrender.com
-      - key: DB_ENGINE
-        value: django.db.backends.postgresql
-      - key: DB_NAME
-        fromDatabase:
-          name: manish-portfolio-db
-          property: database
-      - key: DB_USER
-        fromDatabase:
-          name: manish-portfolio-db
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: manish-portfolio-db
-          property: password
-      - key: DB_HOST
-        fromDatabase:
-          name: manish-portfolio-db
-          property: host
-      - key: DB_PORT
-        fromDatabase:
-          name: manish-portfolio-db
-          property: port
-
-databases:
-  - name: manish-portfolio-db
-    plan: starter
+      - key: SECURE_SSL_REDIRECT
+        value: "True"
