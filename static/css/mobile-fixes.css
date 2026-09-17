@@ -1,6 +1,7 @@
 /* Mobile + fixed-header polish — isolated responsive layer. Keep main.css untouched. */
 
-/* The site header is permanently attached to the viewport. */
+/* Fixed means viewport-fixed: do not transform this ancestor because that can
+   create a containing block for fixed descendants on iOS Safari. */
 .site-header {
   position: fixed !important;
   top: 0;
@@ -8,8 +9,6 @@
   right: 0;
   width: 100%;
   z-index: 1000;
-  will-change: transform;
-  transform: translate3d(0,0,0);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
@@ -39,7 +38,7 @@ body {
   .brand small { line-height: 1.25; }
   .header-actions { display: none; }
 
-  /* Open state: header becomes a stable viewport-level menu layer. */
+  /* Open state: one stable viewport-level menu layer. */
   .site-header.menu-open {
     position: fixed !important;
     top: 0;
@@ -56,7 +55,7 @@ body {
     pointer-events: none;
   }
 
-  /* Backdrop is behind the drawer and close button, never over them. */
+  /* Backdrop stays behind the drawer and close button. */
   .site-header.menu-open::after {
     content: "";
     position: fixed;
@@ -75,7 +74,7 @@ body {
     pointer-events: none;
   }
 
-  /* Critical: don't let the normal header brand render through the overlay. */
+  /* Never allow the normal brand to appear through the open drawer. */
   .site-header.menu-open .brand,
   .site-header.menu-open .header-actions {
     opacity: 0 !important;
