@@ -21,14 +21,14 @@
         {% if homepage.hero_image %}
           <img src="{{ homepage.hero_image.url }}" alt="Featured textile design by {{ site_settings.site_name }}">
         {% else %}
-          <div class="placeholder-swatch">Hero artwork<br>(upload from Homepage Settings)</div>
+          <img src="{% static 'images/default-textile.svg' %}" alt="Contemporary botanical textile surface pattern">
         {% endif %}
       </div>
       <div class="frame square secondary">
         {% if homepage.hero_secondary_image %}
           <img src="{{ homepage.hero_secondary_image.url }}" alt="Detail of a textile surface pattern">
         {% else %}
-          <div class="placeholder-swatch">Detail shot</div>
+          <img src="{% static 'images/default-textile.svg' %}" alt="Botanical textile pattern detail">
         {% endif %}
       </div>
     </div>
@@ -63,7 +63,7 @@
             {% elif first_project and first_project.cover_image %}
               <img src="{{ first_project.cover_image.url }}" alt="{{ category.name }} — textile design category">
             {% else %}
-              <div class="placeholder-swatch">{{ category.name }}</div>
+              <img src="{% static 'images/default-textile.svg' %}" alt="{{ category.name }} — textile design category">
             {% endif %}
           {% endwith %}
         </div>
@@ -74,7 +74,7 @@
       {% endfor %}
     </div>
     {% else %}
-    <p>Categories will appear here once added from the studio dashboard.</p>
+    <p>Explore textile print design, surface pattern development and CAD artwork through the portfolio.</p>
     {% endif %}
   </div>
 </section>
@@ -93,7 +93,7 @@
           {% if project.cover_image %}
             <img src="{{ project.cover_image.url }}" alt="{{ project.title }} — {{ project.category.name }}">
           {% else %}
-            <div class="placeholder-swatch">{{ project.title }}</div>
+            <img src="{% static 'images/default-textile.svg' %}" alt="Textile design artwork for {{ project.title }}">
           {% endif %}
         </div>
         <div class="meta">{{ project.category.name }}</div>
@@ -170,7 +170,7 @@
       <a class="blog-card" href="{{ post.get_absolute_url }}">
         <div class="frame wide">
           {% if post.featured_image %}<img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
-          {% else %}<div class="placeholder-swatch">{{ post.title }}</div>{% endif %}
+          {% else %}<img src="{% static 'images/default-textile.svg' %}" alt="Textile design article: {{ post.title }}">{% endif %}
         </div>
         <div class="meta">{% if post.category %}{{ post.category.name }} · {% endif %}{{ post.reading_time_minutes }} min read</div>
         <h3>{{ post.title }}</h3>
