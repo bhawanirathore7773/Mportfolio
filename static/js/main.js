@@ -2,6 +2,14 @@
   "use strict";
 
   var header = document.querySelector(".site-header");
+
+  /* Keep fixed-header spacing synchronized with the real rendered height. */
+  var syncHeaderHeight = function () {
+    if (!header || header.classList.contains("menu-open")) return;
+    var height = Math.ceil(header.getBoundingClientRect().height);
+    if (height > 0) document.documentElement.style.setProperty("--site-header-height", height + "px");
+  };
+
   if (header) {
     var onScroll = function () {
       if (!header.classList.contains("menu-open")) {
@@ -9,7 +17,12 @@
       }
     };
     onScroll();
+    syncHeaderHeight();
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", syncHeaderHeight, { passive: true });
+    if (window.ResizeObserver) {
+      new ResizeObserver(syncHeaderHeight).observe(header.querySelector(".container") || header);
+    }
   }
 
   var toggle = document.querySelector(".menu-toggle");
@@ -25,6 +38,7 @@
       document.documentElement.classList.remove("menu-open");
       document.body.classList.remove("menu-open");
       document.body.style.overflow = "";
+      syncHeaderHeight();
     };
 
     var openMenu = function () {
