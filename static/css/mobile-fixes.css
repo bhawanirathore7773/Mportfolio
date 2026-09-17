@@ -4,6 +4,8 @@
   body { overflow-x: hidden; }
 
   .site-header {
+    position: sticky;
+    top: 0;
     z-index: 1000;
     width: 100%;
     background: rgba(246,245,240,.97);
@@ -21,29 +23,33 @@
   .brand small { line-height: 1.25; }
   .header-actions { display: none; }
 
+  /* Full viewport drawer: fixed to the viewport, never to document scroll. */
   .main-nav {
     position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
     left: auto;
-    z-index: 1001;
+    z-index: 1002;
     width: min(340px, 88vw);
-    height: 100vh;
-    height: 100dvh;
-    min-height: 100vh;
-    padding: max(88px, calc(env(safe-area-inset-top) + 76px)) 28px max(28px, env(safe-area-inset-bottom));
+    height: auto;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    box-sizing: border-box;
+    padding: max(88px, calc(env(safe-area-inset-top) + 76px)) 28px max(28px, calc(env(safe-area-inset-bottom) + 18px));
     margin: 0;
+    overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+    touch-action: pan-y;
     background: #fffefb;
     border-left: 1px solid var(--line);
-    box-shadow: -100vw 0 0 100vw rgba(22,24,28,.38), -18px 0 50px rgba(22,24,28,.12);
+    box-shadow: -18px 0 50px rgba(22,24,28,.12);
     transform: translate3d(105%,0,0);
     visibility: hidden;
     pointer-events: none;
-    transition: transform .32s cubic-bezier(.22,1,.36,1), visibility .32s ease;
+    transition: transform .36s cubic-bezier(.22,1,.36,1), visibility 0s linear .36s;
     will-change: transform;
   }
 
@@ -51,6 +57,19 @@
     transform: translate3d(0,0,0);
     visibility: visible;
     pointer-events: auto;
+    transition: transform .36s cubic-bezier(.22,1,.36,1), visibility 0s linear 0s;
+  }
+
+  /* Independent full-screen backdrop, including below/behind the drawer. */
+  body.menu-open::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 1001;
+    background: rgba(22,24,28,.38);
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity .28s ease;
   }
 
   .main-nav ul {
@@ -94,7 +113,7 @@
     display: grid;
     place-items: center;
     position: relative;
-    z-index: 1002;
+    z-index: 1003;
     flex: 0 0 48px;
     width: 48px;
     height: 48px;
@@ -105,6 +124,7 @@
     background: transparent;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+    cursor: pointer;
   }
 
   .menu-toggle span,
@@ -121,11 +141,12 @@
   .menu-toggle span::before { top: -9px; }
   .menu-toggle span::after { top: 9px; }
 
+  /* Keep the close button fixed above the drawer while the page is scrolled. */
   .menu-toggle[aria-expanded="true"] {
     position: fixed;
     top: max(11px, env(safe-area-inset-top));
     right: max(14px, env(safe-area-inset-right));
-    z-index: 1003;
+    z-index: 1004;
     background: #fffefb;
     box-shadow: 0 0 0 1px rgba(218,214,203,.8), 0 6px 18px rgba(22,24,28,.08);
   }
@@ -165,4 +186,12 @@
   .hero-actions { grid-template-columns: 1fr; }
   .brand { font-size: 1.08rem; }
   .brand small { font-size: .61rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-nav,
+  .menu-toggle span,
+  .menu-toggle span::before,
+  .menu-toggle span::after,
+  body.menu-open::before { transition: none !important; }
 }
