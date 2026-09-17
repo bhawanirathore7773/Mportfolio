@@ -9,6 +9,7 @@ from .sitemaps import sitemaps
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("health/", core_views.health_check, name="health_check"),
     path("", include("apps.core.urls")),
     path("work/", include("apps.portfolio.urls")),
     path("blog/", include("apps.blog.urls")),
