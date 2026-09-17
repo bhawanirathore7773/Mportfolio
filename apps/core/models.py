@@ -43,7 +43,7 @@ class SingletonModel(models.Model):
 class SiteSettings(SingletonModel):
     """Global, site-wide settings editable from one place in the admin."""
 
-    site_name = models.CharField(max_length=120, default="Manish Kanwar")
+    site_name = models.CharField(max_length=120, default="Manisha Kanwar")
     tagline = models.CharField(max_length=200, blank=True, default="Textile Designer & CAD Designer")
     logo = models.ImageField(upload_to="site/", blank=True, null=True, validators=[validate_image_file])
     favicon = models.ImageField(upload_to="site/", blank=True, null=True, validators=[validate_image_file])
