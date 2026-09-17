@@ -1,16 +1,18 @@
 {% load static %}
 <header class="site-header">
   <div class="container">
-    <a href="{% url 'core:home' %}" class="brand">
+    <a href="{% url 'core:home' %}" class="brand" aria-label="{{ site_settings.site_name }} home">
       {{ site_settings.site_name }}
       <small>{{ site_settings.tagline }}</small>
     </a>
 
-    <button class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="main-nav">
-      <span></span>
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav">
+      <span class="menu-icon" aria-hidden="true"><i></i><i></i><i></i></span>
     </button>
 
-    <nav class="main-nav" id="main-nav">
+    <div class="nav-backdrop" aria-hidden="true"></div>
+
+    <nav class="main-nav" id="main-nav" aria-label="Main navigation">
       <ul>
         <li><a href="{% url 'portfolio:work_home' %}">Work</a></li>
         <li><a href="{% url 'profiles:about' %}">About</a></li>
